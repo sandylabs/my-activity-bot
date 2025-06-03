@@ -1,0 +1,29 @@
+name: Daily Auto Commit
+
+on:
+  schedule:
+    # Menjalankan workflow setiap hari pada jam 05:00 UTC (12:00 WIB)
+    - cron: '0 5 * * *'
+  # Opsi untuk menjalankan secara manual dari tab Actions
+  workflow_dispatch:
+
+jobs:
+  auto-commit-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. Checkout Repository
+        # Mengunduh kode dari repo agar bisa dimodifikasi
+        uses: actions/checkout@v4
+
+      - name: 2. Modify a file
+        # Menambahkan baris baru berisi tanggal dan waktu ke file "activity.log"
+        run: echo "Automated commit on $(date)" >> activity.log
+
+      - name: 3. Commit and Push
+        # Melakukan proses git commit dan push
+        run: |
+          git config --global user.name 'sandylabs'
+          git config --global user.email '231051010@students.unsurya.ac.id'
+          git add activity.log
+          git commit -m "chore: Automated Daily Commit"
+          git push
